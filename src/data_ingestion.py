@@ -52,12 +52,8 @@ def load_data(data_url: str) -> pd.DataFrame:
 # Preprocess the data
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     try:
-        # preprocessing: Drop duplicates and handle missing values
-        df = df.drop_duplicates()
-        df = df.dropna()
         df.drop(columns = ['Unnamed: 2', 'Unnamed: 3', 'Unnamed: 4'], inplace=True)
         df.rename(columns = {'v1': 'target', 'v2': 'text'}, inplace=True)
-        df['target'] = df['target'].map({'ham': 0, 'spam': 1})
         logger.debug('Data preprocessing completed successfully')
         return df
     except Exception as e:
