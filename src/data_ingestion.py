@@ -78,7 +78,7 @@ def save_data(train_data: pd.DataFrame, test_data: pd.DataFrame, data_path: str)
 
 def main():
     try:
-        test_size = 0.2
+        test_size = 0.21
         data_path = 'https://raw.githubusercontent.com/manvitha-konki/MLOPS_ML_pipeline/refs/heads/main/experiments/spam.csv'
         df = load_data(data_path)
         final_df = preprocess_data(df)
