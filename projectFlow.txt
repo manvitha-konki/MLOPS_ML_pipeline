@@ -1,0 +1,2 @@
+1. Add experiments, src folder
+2. Add data, models, reports directories to .gitignore file
