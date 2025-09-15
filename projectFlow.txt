@@ -11,3 +11,9 @@ Setting up dvc pipeline (without params):
     starting from the root stages and only executing those that require an update.)
     3. git add, commit, push
 
+Setting up dvc pipeline (with params)
+    1. Adding param.yaml
+    2. Add the params setup
+    3. Do "dvc repro" again to test
+    4. git add, commit, push
+
