@@ -4,4 +4,4 @@ feature_engineering:
   max_features: 51
 model_building:
   n_estimators: 20
-  random_state: 42 
+  random_state: 42

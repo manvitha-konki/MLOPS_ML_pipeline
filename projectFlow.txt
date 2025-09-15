@@ -17,3 +17,11 @@ Setting up dvc pipeline (with params)
     3. Do "dvc repro" again to test
     4. git add, commit, push
 
+Experiments with DVC
+    1. pip install dvclive
+    2. Add the dvclive code block
+    3. Do "dvc exp run", it will create a new dvc.yaml(if not exists) and dvclive directory
+    4. Do "dvc run show" to see experiments or use extensions on vscode
+    5. Change params and try produce new experiments
+    6. Git add, commit, push
+

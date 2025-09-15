@@ -5,6 +5,8 @@ import pickle
 import json
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 import logging
+from dvclive import Live
+import yaml
 
 
 # Ensure the "logs" directory exists
@@ -35,6 +37,24 @@ file_handler.setFormatter(formatter)
 # For this logger we are defining the handlers and formats
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
+
+
+# Adding params from params.yaml file
+def load_params(params_path: str)-> dict:
+    try:
+        with open(params_path, 'r') as yaml_file:
+            params = yaml.safe_load(yaml_file)
+            logger.debug(f'Params loaded successfully from {params_path}')
+            return params
+    except FileNotFoundError as e:
+        logger.error(f'Params file not found: {e}')
+        raise
+    except yaml.YAMLError as e:
+        logger.error(f'Error parsing YAML file: {e}')
+        raise
+    except Exception as e:
+        logger.error(f'Unexpected Error: {e}')
+        raise
 
 
 def load_model(file_path: str):
@@ -103,6 +123,8 @@ def save_metrics(metrics: dict, file_path: str) -> None:
 
 def main():
     try:
+        # Loading params.yaml file
+        params = load_params('params.yaml')
         clf = load_model('./models/model.pkl')
         test_data = load_data('./data/processed/test_tfidf.csv')
         
@@ -111,6 +133,16 @@ def main():
 
         metrics = evaluate_model(clf, X_test, y_test)
         
+        with Live(save_dvc_exp=True) as live:       # save_dvc_exp=True to save the metrics for each experiment
+            # Used to log metrics for different experiments in DVC
+            live.log_metric('accuracy',accuracy_score(y_test, y_test))
+            live.log_metric('precision', precision_score(y_test, y_test))
+            live.log_metric('recall', recall_score(y_test, y_test))
+            live.log_metric('auc', roc_auc_score(y_test, y_test))
+
+            # Used to log params for different experiments in DVC
+            live.log_params(params)
+
         save_metrics(metrics, 'reports/metrics.json')
     except Exception as e:
         logger.error('Failed to complete the model evaluation process: %s', e)
